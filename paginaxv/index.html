@@ -13,13 +13,15 @@
 
     <style>
         :root {
-            --gold: #d4af37;
-            --dark-gold: #aa8439;
-            --black: #0a0a0a;
+            --gold: #c5a028;
+            --dark-gold: #96741b;
+            --light-gold: #f4e3a4;
+            --elegant-dark: #2c2518;
+            --light-bg: #ece9e2; /* Tono gris claro refinado para el fondo */
         }
         body {
-            background-color: var(--black);
-            color: white;
+            background-color: var(--light-bg);
+            color: var(--elegant-dark);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
@@ -28,13 +30,13 @@
         .font-elegant { font-family: 'Cinzel', serif; }
         
         .gold-gradient {
-            background: linear-gradient(45deg, #d4af37, #f7ef8a, #d4af37, #aa8439);
+            background: linear-gradient(45deg, #96741b, #c5a028, #f4e3a4, #96741b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .btn-gold {
             background: linear-gradient(45deg, var(--dark-gold), var(--gold));
-            color: var(--black);
+            color: #ffffff;
             font-weight: bold;
             transition: all 0.3s ease;
         }
@@ -42,10 +44,11 @@
             transform: scale(0.95);
         }
         .card {
-            background: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            background: rgba(234, 229, 218, 0.95); /* Tarjetas un poco más oscuras para mayor contraste */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(197, 160, 40, 0.35);
+            box-shadow: 0 15px 45px rgba(150, 116, 27, 0.15);
         }
         @keyframes flow {
             from { transform: translateY(0); }
@@ -53,16 +56,22 @@
         }
         .sparkle {
             position: absolute;
-            width: 2px;
-            height: 2px;
+            width: 3px;
+            height: 3px;
             background: var(--gold);
             border-radius: 50%;
             pointer-events: none;
         }
         .hover-gold:hover {
             border-color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(197, 160, 40, 0.08);
             transform: translateY(-2px);
+        }
+        /* Estilo optimizado para las imágenes de fondo de la galería */
+        .slideshow-img {
+            transition: opacity 1.8s ease-in-out;
+            background-size: cover;
+            background-position: center;
         }
         /* Mobile adjustments */
         @media (max-width: 480px) {
@@ -71,12 +80,40 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 py-10">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 py-10 relative">
+    
+    <!-- GALERÍA DE FOTOS EN FONDO CON FILTRO GRIS CLARO SUAVE -->
+    <div id="bg-slideshow" class="fixed inset-0 z-[-2] overflow-hidden bg-[#ece9e2]">
+        <!-- Capas de imágenes con fallbacks de internet y filtro desaturado claro sobre gris arena -->
+        <div class="slideshow-img absolute inset-0 opacity-0"
+     style="background-image: url('img/img1.jpg');
+            filter: grayscale(100%) brightness(1.1) contrast(0.9) opacity(0.7);">
+</div>
+
+<div class="slideshow-img absolute inset-0 opacity-0"
+     style="background-image: url('img/img2.jpg');
+            filter: grayscale(100%) brightness(1.1) contrast(0.9) opacity(0.7);">
+</div>
+
+        <!-- Velo degradado gris claro protector para suavizar y asegurar legibilidad -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#ece9e2]/85 via-[#ece9e2]/65 to-[#ece9e2]/90 z-[-1]"></div>
+    </div>
+
     <div id="sparkles-container" class="fixed inset-0 pointer-events-none"></div>
+
+    <!-- REPRODUCTOR DE MÚSICA EN LOOP -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button id="musicToggle" class="w-12 h-12 flex items-center justify-center bg-white/95 border border-gold/40 rounded-full shadow-lg hover:border-gold transition-all duration-300">
+            <span id="musicIcon" class="text-xl">🎵</span>
+        </button>
+        <audio id="bgMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 
     <!-- BOTÓN ADMIN CON PROTECCIÓN -->
     <div class="fixed top-4 right-4 z-50">
-        <button id="toggleView" class="text-[10px] text-gray-600 border border-gray-800 px-3 py-1 rounded-full uppercase tracking-tighter opacity-40 hover:opacity-100 transition-opacity">
+        <button id="toggleView" class="text-[10px] text-gray-500 border border-gold/40 bg-white/85 px-3 py-1 rounded-full uppercase tracking-tighter opacity-75 hover:opacity-100 transition-opacity">
             Admin
         </button>
     </div>
@@ -89,63 +126,125 @@
             <div class="h-[1px] w-24 bg-gold mx-auto opacity-40"></div>
         </header>
 
+        <!-- SECCIÓN DE CUENTA REGRESIVA -->
+        <section class="card p-4 rounded-2xl">
+            <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase mb-2">Faltan tan solo</p>
+            <div class="grid grid-cols-3 gap-2 max-w-xs mx-auto">
+                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
+                    <span id="countdown-days" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
+                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Días</p>
+                </div>
+                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
+                    <span id="countdown-hours" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
+                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Horas</p>
+                </div>
+                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
+                    <span id="countdown-minutes" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
+                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Minutos</p>
+                </div>
+            </div>
+        </section>
+
         <section class="card p-6 md:p-8 rounded-3xl space-y-6">
-            <p class="text-sm md:text-lg font-light leading-relaxed px-2">
-                Te invito a compartir una noche mágica e inolvidable donde los sueños se hacen realidad.
+            <p class="text-sm md:text-lg font-light leading-relaxed px-2 text-amber-950">
+                ¡Llegó la noche de festejar a lo grande! Quisiera que vengas con todas las ganas de bailar, divertirte y que hagamos de esa noche un recuerdo inolvidable…
             </p>
             
             <div class="space-y-4">
                 <div class="grid grid-cols-2 gap-4 text-xs md:text-sm font-elegant">
                     <div class="border-r border-gold/20 text-center">
-                        <p class="text-gold tracking-widest mb-1">FECHA</p>
-                        <p class="text-base md:text-lg">21 . 08 . 2026</p>
+                        <p class="text-gold tracking-widest mb-1 font-semibold">FECHA</p>
+                        <p class="text-base md:text-lg text-amber-950 font-bold">21 . 08 . 2026</p>
                     </div>
                     <div class="text-center">
-                        <p class="text-gold tracking-widest mb-1">HORA</p>
-                        <p class="text-base md:text-lg">21:00 HS</p>
+                        <p class="text-gold tracking-widest mb-1 font-semibold">HORA</p>
+                        <p class="text-base md:text-lg text-amber-950 font-bold">21:00 HS</p>
                     </div>
                 </div>
                 <!-- Botón de Calendario -->
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Mis+XV+-+Chiara&dates=20260821T210000/20260822T050000&details=¡Te+espero+para+celebrar+mis+15+años!&location=Salón+Colony,+CABA&sf=true&output=xml" target="_blank" class="inline-block text-[10px] text-gold border border-gold/30 px-4 py-1.5 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all">
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Mis+XV+-+Chiara&dates=20260821T210000/20260822T050000&details=¡Te+espero+para+celebrar+mis+15+años!&location=Salón+Colony,+CABA&sf=true&output=xml" target="_blank" class="inline-block text-[10px] text-gold border border-gold/40 px-4 py-1.5 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-semibold bg-white/50">
                     📅 Agendar evento
                 </a>
             </div>
 
             <!-- Bloque de Lugar con Enlace a Maps -->
             <a href="https://www.google.com/maps/dir//Colony+Eventos,+Cnel.+Ramón+L.+Falcón+2935,+C1406GOG+Cdad.+Autónoma+de+Buenos+Aires/@-34.6348712,-58.4719752,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x95bcc98f5ae5e6eb:0xce0eb785fcd8edc8!2m2!1d-58.4696918!2d-34.6322417" target="_blank" 
-               class="block py-4 px-3 border border-gold/10 bg-white/5 rounded-xl hover-gold transition-all duration-300">
-                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] mb-1 uppercase">Lugar de la fiesta</p>
-                <p class="text-lg md:text-xl font-elegant tracking-wider">SALÓN COLONY</p>
-                <p class="text-[10px] md:text-xs text-gray-400 mt-1">Cnel. Ramón L. Falcón 2935, CABA</p>
-                <p class="text-[9px] text-gold mt-2 uppercase tracking-tighter opacity-70">📍 Toca para ver el mapa</p>
+               class="block py-4 px-3 border border-gold/20 bg-white/70 rounded-xl hover-gold transition-all duration-300">
+                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] mb-1 uppercase font-semibold">Lugar de la fiesta</p>
+                <p class="text-lg md:text-xl font-elegant tracking-wider text-amber-950 font-bold">SALÓN COLONY</p>
+                <p class="text-[10px] md:text-xs text-amber-900 mt-1">Cnel. Ramón L. Falcón 2935, CABA</p>
+                <p class="text-[9px] text-gold mt-2 uppercase tracking-tighter opacity-80 font-semibold">📍 Toca para ver el mapa</p>
             </a>
 
+            <!-- SECCIÓN QUIERO VER TUS FOTOS -->
+            <div class="py-4 px-3 border border-gold/20 bg-white/70 rounded-xl text-center space-y-3">
+                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Recuerdos compartidos</p>
+                <p class="text-xs text-amber-950 font-light">¡Ayúdame a capturar momentos! Sube todas tus fotos y videos del evento aquí:</p>
+                <a href="https://drive.google.com/drive/folders/1pZjBb0p9KDOUeHsgoIFI933f3xX4hoPS?usp=drive_link" target="_blank" 
+                   class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-500 text-white font-semibold text-xs py-2.5 px-6 rounded-full uppercase tracking-wider transition-all duration-300 shadow-md">
+                    📸 Compartir fotos
+                </a>
+            </div>
+
+            <!-- FORMULARIO DE CONFIRMACIÓN -->
             <div id="rsvpForm" class="space-y-5 pt-2 text-left">
                 <div class="space-y-2">
-                    <label class="block text-[10px] text-gold font-elegant uppercase tracking-widest text-center">Confirma tu asistencia</label>
+                    <label class="block text-[10px] text-gold font-elegant uppercase tracking-widest text-center font-semibold">Confirma tu asistencia</label>
                     <input type="text" id="guestName" placeholder="Nombre y Apellido" 
-                           class="w-full bg-black border border-gold/30 p-4 rounded-xl focus:outline-none focus:border-gold text-white text-center text-sm transition-all shadow-inner">
+                           class="w-full bg-white/95 border border-gold/40 p-4 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-center text-sm transition-all shadow-sm">
                 </div>
                 
+                <!-- SECTORES CONDICIONALES PARA ASISTENTES -->
+                <div id="attendingExtras" class="hidden space-y-4 p-4 border border-gold/20 bg-white/90 rounded-2xl animate-fade-in shadow-inner">
+                    <div class="space-y-2">
+                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Restricciones en la alimentación</label>
+                        <select id="dietaryRestriction" class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs font-medium">
+                            <option value="Ninguna">Ninguna</option>
+                            <option value="Celíaco">Celíaco</option>
+                            <option value="Diabetes">Diabetes</option>
+                            <option value="Intolerante a la lactosa">Intolerante a la lactosa</option>
+                            <option value="Vegetariano">Vegetariano</option>
+                            <option value="Vegano">Vegano</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Canción que no puede faltar</label>
+                        <input type="text" id="favoriteSong" placeholder="Ej: Nombre de la Canción - Artista" 
+                               class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs">
+                    </div>
+                </div>
+
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="submitRSVP(true)" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs shadow-lg">
+                    <button onclick="handleAttendanceClick(true)" id="btnAsistire" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs shadow-lg transition-all font-semibold">
                         Asistiré
                     </button>
-                    <button onclick="submitRSVP(false)" class="border border-white/10 text-gray-400 hover:text-red-400 hover:bg-red-900/10 w-full py-4 rounded-xl uppercase tracking-widest text-xs transition-colors">
+                    <button onclick="submitRSVP(false)" id="btnNoAsistire" class="border border-gold/30 text-amber-900 bg-white/40 hover:text-red-700 hover:bg-red-50 w-full py-4 rounded-xl uppercase tracking-widest text-xs transition-colors font-medium">
                         No podré ir
                     </button>
                 </div>
-                
-                <p id="statusMsg" class="text-center text-[10px] italic text-gray-500 min-h-[1rem]"></p>
 
-                <!-- Sección Dress Code Simplificada -->
-                <div class="pt-4 border-t border-gold/10 text-center space-y-1">
-                    <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase">Dress Code</p>
-                    <p class="text-base md:text-lg font-elegant tracking-[0.2em] text-white">ELEGANTE</p>
+                <!-- Botón definitivo de confirmación que aparece al elegir asistir -->
+                <div id="finalSubmitBlock" class="hidden">
+                    <button onclick="submitRSVP(true)" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs shadow-xl font-bold border border-gold">
+                        Confirmar Asistencia ✅
+                    </button>
                 </div>
                 
-                <div class="p-3 border border-gold/10 rounded-xl bg-black/40 text-center">
-                    <p class="text-[9px] md:text-[10px] text-gold/60 font-elegant uppercase tracking-widest leading-relaxed">
+                <p id="statusMsg" class="text-center text-[10px] italic text-amber-900 min-h-[1rem] font-medium"></p>
+
+                <!-- Sección Dress Code Simplificada -->
+                <div class="pt-4 border-t border-gold/20 text-center space-y-1.5">
+                    <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Dress Code</p>
+                    <p class="text-base md:text-lg font-elegant tracking-[0.2em] text-amber-950 font-bold">ELEGANTE</p>
+                    <!-- Nota de advertencia de tonalidades/colores añadida -->
+                    <p class="text-[10px] md:text-xs text-amber-900/90 font-medium px-4 leading-relaxed max-w-sm mx-auto">
+                        ⚠️ Evitar tonalidades claras, así como también colores dorados y plateados.
+                    </p>
+                </div>
+                
+                <div class="p-3 border border-gold/20 rounded-xl bg-white/60 text-center shadow-inner">
+                    <p class="text-[9px] md:text-[10px] text-amber-900 font-elegant uppercase tracking-widest leading-relaxed font-semibold">
                         ⚠️ Grupo familiar: completar una vez por cada integrante para asegurar su lugar.
                     </p>
                 </div>
@@ -153,40 +252,58 @@
 
             <div id="successMsg" class="hidden space-y-4 py-10 animate-pulse">
                 <p class="text-gold font-title text-4xl md:text-5xl">¡Gracias!</p>
-                <p class="text-xs md:text-sm text-gray-400">Tu respuesta ha sido registrada.</p>
-                <button onclick="resetForm()" class="mt-4 text-[10px] text-gold border border-gold/30 px-6 py-2 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all">
+                <p class="text-xs md:text-sm text-amber-900 font-medium">Tu respuesta ha sido registrada.</p>
+                <button onclick="resetForm()" class="mt-4 text-[10px] text-gold border border-gold/40 px-6 py-2 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-semibold bg-white/85">
                     Registrar otro familiar
                 </button>
             </div>
         </section>
 
-        <footer class="opacity-30 text-[9px] tracking-[0.3em] font-elegant uppercase">
+        <footer class="opacity-40 text-[9px] tracking-[0.3em] font-elegant uppercase text-amber-950 font-bold">
             Te esperamos con alegría
         </footer>
     </div>
 
     <!-- VISTA ADMIN -->
     <div id="adminView" class="hidden w-full max-w-4xl py-6 animate-fade-in">
-        <div class="card p-4 md:p-6 rounded-2xl overflow-hidden">
+        <div class="card p-4 md:p-6 rounded-2xl overflow-hidden bg-white/95">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-                <h2 class="font-elegant text-xl text-gold">Panel de Control</h2>
-                <div class="flex gap-2">
-                    <span id="guestCount" class="bg-gold text-black px-3 py-1 rounded-full text-[10px] font-bold uppercase">0</span>
+                <div>
+                    <h2 class="font-elegant text-xl text-gold font-bold">Panel de Control</h2>
+                    <p class="text-[10px] text-amber-950 uppercase mt-1 font-semibold">Exclusivo para organizadores</p>
                 </div>
+                <div class="flex gap-2">
+                    <span id="guestCount" class="bg-gold text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase shadow">0 ASISTIRÁN</span>
+                </div>
+            </div>
+
+            <!-- Filtros del administrador -->
+            <div class="flex flex-wrap gap-2 mb-6 border-b border-gold/20 pb-4">
+                <button onclick="filterAdminTable('all')" id="filterBtn-all" class="text-[10px] border border-gold text-gold bg-gold/10 px-3 py-1.5 rounded-full uppercase tracking-widest font-bold transition-all">
+                    👥 Quienes Votaron
+                </button>
+                <button onclick="filterAdminTable('restrictions')" id="filterBtn-restrictions" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium">
+                    🥗 Restricciones Alimentarias
+                </button>
+                <button onclick="filterAdminTable('songs')" id="filterBtn-songs" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium">
+                    🎵 Canciones sugeridas
+                </button>
             </div>
             
             <div class="overflow-x-auto -mx-4 md:mx-0">
                 <table class="w-full text-left text-[11px] md:text-sm">
                     <thead class="border-b border-gold/20 text-gold uppercase text-[9px] tracking-widest">
-                        <tr>
+                        <tr id="adminTableHeader">
                             <th class="p-4">Invitado</th>
                             <th class="p-4">Estado</th>
+                            <th class="p-4">Restricciones</th>
+                            <th class="p-4">Canción Favorita</th>
                             <th class="p-4 text-right">Fecha</th>
                         </tr>
                     </thead>
-                    <tbody id="guestTableBody" class="divide-y divide-white/5">
+                    <tbody id="guestTableBody" class="divide-y divide-amber-900/10 text-amber-950">
                         <tr>
-                            <td colspan="3" class="p-10 text-center text-gray-600">Cargando...</td>
+                            <td colspan="5" class="p-10 text-center text-amber-900/60 font-medium">Cargando...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -201,14 +318,14 @@
 
         // CONFIGURACIÓN
         const firebaseConfig = {
-  apiKey: "AIzaSyD8_IFSlsfb6IyG9ucynH2kj_YlOiHCAgY",
-  authDomain: "xvchiara.firebaseapp.com",
-  projectId: "xvchiara",
-  storageBucket: "xvchiara.firebasestorage.app",
-  messagingSenderId: "132169657491",
-  appId: "1:132169657491:web:ff05cda0a3cbad98483166",
-  measurementId: "G-H8FTZBBJV7"
-};
+            apiKey: "AIzaSyD8_IFSlsfb6IyG9ucynH2kj_YlOiHCAgY",
+            authDomain: "xvchiara.firebaseapp.com",
+            projectId: "xvchiara",
+            storageBucket: "xvchiara.firebasestorage.app",
+            messagingSenderId: "132169657491",
+            appId: "1:132169657491:web:ff05cda0a3cbad98483166",
+            measurementId: "G-H8FTZBBJV7"
+        };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -219,6 +336,8 @@
 
         let userAuthenticated = false;
         let unsubscribeList = null;
+        let allGuestsData = [];
+        let activeFilter = 'all'; 
 
         const invitationView = document.getElementById('invitationView');
         const adminView = document.getElementById('adminView');
@@ -245,6 +364,21 @@
             }
         });
 
+        // CONTROLADOR DE CLIC EN ASISTIRÉ
+        window.handleAttendanceClick = (isAttending) => {
+            const extraSection = document.getElementById('attendingExtras');
+            const submitBlock = document.getElementById('finalSubmitBlock');
+            const btnAsistire = document.getElementById('btnAsistire');
+            const btnNoAsistire = document.getElementById('btnNoAsistire');
+
+            extraSection.classList.remove('hidden');
+            submitBlock.classList.remove('hidden');
+            
+            // Visuales de Selección
+            btnAsistire.classList.add('opacity-40');
+            btnNoAsistire.classList.add('hidden');
+        };
+
         window.submitRSVP = async (isAttending) => {
             const name = document.getElementById('guestName').value.trim();
             if (!name) {
@@ -253,12 +387,22 @@
             }
             if (!userAuthenticated) return;
             statusMsg.textContent = "Procesando...";
+
+            let restriction = 'Ninguna';
+            let song = '';
+
+            if (isAttending) {
+                restriction = document.getElementById('dietaryRestriction').value;
+                song = document.getElementById('favoriteSong').value.trim();
+            }
             
             try {
                 const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', 'invitados');
                 await addDoc(guestsCol, {
                     nombre: name,
                     asiste: isAttending,
+                    restricciones: restriction,
+                    cancion: song,
                     fecha: serverTimestamp()
                 });
                 rsvpForm.classList.add('hidden');
@@ -270,37 +414,128 @@
 
         window.resetForm = () => {
             document.getElementById('guestName').value = '';
+            document.getElementById('dietaryRestriction').value = 'Ninguna';
+            document.getElementById('favoriteSong').value = '';
+            document.getElementById('attendingExtras').classList.add('hidden');
+            document.getElementById('finalSubmitBlock').classList.add('hidden');
+            
+            const btnAsistire = document.getElementById('btnAsistire');
+            const btnNoAsistire = document.getElementById('btnNoAsistire');
+            btnAsistire.classList.remove('opacity-40', 'hidden');
+            btnNoAsistire.classList.remove('hidden');
+
             statusMsg.textContent = '';
             successMsg.classList.add('hidden');
             rsvpForm.classList.remove('hidden');
         };
 
+        // GESTIÓN DEL FILTRADO EN TIEMPO REAL PARA EL ADMIN
+        window.filterAdminTable = (filter) => {
+            activeFilter = filter;
+            
+            // Actualizar botones visuales de filtro
+            ['all', 'restrictions', 'songs'].forEach(f => {
+                const btn = document.getElementById(`filterBtn-${f}`);
+                if (f === filter) {
+                    btn.className = "text-[10px] border border-gold text-gold bg-gold/10 px-3 py-1.5 rounded-full uppercase tracking-widest font-bold transition-all";
+                } else {
+                    btn.className = "text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium";
+                }
+            });
+
+            renderAdminTable();
+        };
+
+        function renderAdminTable() {
+            guestTableBody.innerHTML = '';
+            
+            if (allGuestsData.length === 0) {
+                guestTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-amber-900/60 font-medium">No hay respuestas registradas</td></tr>';
+                return;
+            }
+
+            // Cambiar los headers según el filtro
+            const headerRow = document.getElementById('adminTableHeader');
+            if (activeFilter === 'restrictions') {
+                headerRow.innerHTML = `
+                    <th class="p-4">Invitado</th>
+                    <th class="p-4">Asiste</th>
+                    <th class="p-4">Restricciones Alimentarias</th>
+                `;
+            } else if (activeFilter === 'songs') {
+                headerRow.innerHTML = `
+                    <th class="p-4">Invitado</th>
+                    <th class="p-4">Canción Sugerida</th>
+                `;
+            } else {
+                headerRow.innerHTML = `
+                    <th class="p-4">Invitado</th>
+                    <th class="p-4">Estado</th>
+                    <th class="p-4">Restricciones</th>
+                    <th class="p-4">Canción Favorita</th>
+                    <th class="p-4 text-right">Fecha</th>
+                `;
+            }
+
+            allGuestsData.forEach(d => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-amber-950/10";
+
+                if (activeFilter === 'restrictions') {
+                    const restriccionFormateada = d.restricciones && d.restricciones !== 'Ninguna' 
+                        ? `<span class="bg-amber-600/20 text-amber-800 px-2 py-0.5 rounded font-bold">${d.restricciones}</span>` 
+                        : `<span class="text-gray-500 font-medium">Ninguna</span>`;
+                    
+                    tr.innerHTML = `
+                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${d.asiste ? 'bg-green-600/20 text-green-700' : 'bg-red-600/20 text-red-700'}">
+                                ${d.asiste ? 'SI' : 'NO'}
+                            </span>
+                        </td>
+                        <td class="p-4">${restriccionFormateada}</td>
+                    `;
+                } else if (activeFilter === 'songs') {
+                    tr.innerHTML = `
+                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
+                        <td class="p-4 text-gold italic font-medium">${d.cancion ? d.cancion : '<span class="text-gray-400">- Sin sugerencia -</span>'}</td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${d.asiste ? 'bg-green-600/20 text-green-700' : 'bg-red-600/20 text-red-700'}">
+                                ${d.asiste ? 'SI' : 'NO'}
+                            </span>
+                        </td>
+                        <td class="p-4 text-amber-900 font-medium text-xs">${d.restricciones || 'Ninguna'}</td>
+                        <td class="p-4 text-gold italic text-xs font-medium">${d.cancion || '-'}</td>
+                        <td class="p-4 text-right text-gray-500 text-[9px] font-semibold">${d.fecha ? new Date(d.fecha.toDate()).toLocaleDateString() : '...'}</td>
+                    `;
+                }
+                guestTableBody.appendChild(tr);
+            });
+        }
+
         function startListening() {
             if (!userAuthenticated) return;
             const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', 'invitados');
             unsubscribeList = onSnapshot(guestsCol, (snapshot) => {
-                guestTableBody.innerHTML = '';
+                allGuestsData = [];
                 let total = 0;
+                
                 snapshot.docs.forEach(doc => {
-                    const d = doc.data();
-                    if (d.asiste) total++;
-                    const tr = document.createElement('tr');
-                    tr.className = "border-b border-white/5";
-                    tr.innerHTML = `
-                        <td class="p-4 font-medium text-white">${d.nombre}</td>
-                        <td class="p-4">
-                            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${d.asiste ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
-                                ${d.asiste ? 'SI' : 'NO'}
-                            </span>
-                        </td>
-                        <td class="p-4 text-right text-gray-500 text-[9px]">${d.fecha ? new Date(d.fecha.toDate()).toLocaleDateString() : '...'}</td>
-                    `;
-                    guestTableBody.appendChild(tr);
+                    const data = doc.data();
+                    if (data.asiste) total++;
+                    allGuestsData.push(data);
                 });
+
                 guestCountBadge.textContent = `${total} ASISTIRÁN`;
+                renderAdminTable();
             });
         }
 
+        // ACCESO AL PANEL DE ADMINISTRACIÓN
         document.getElementById('toggleView').addEventListener('click', () => {
             if (adminView.classList.contains('hidden')) {
                 const pass = prompt("Introduce la clave de administrador:");
@@ -318,6 +553,74 @@
             }
         });
 
+        // INICIALIZACIÓN DE LA CUENTA REGRESIVA EN TIEMPO REAL
+        function initCountdown() {
+            const targetDate = new Date("Aug 21, 2026 21:00:00").getTime();
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+
+                if (difference < 0) {
+                    document.getElementById('countdown-days').textContent = "00";
+                    document.getElementById('countdown-hours').textContent = "00";
+                    document.getElementById('countdown-minutes').textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                document.getElementById('countdown-days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 60000); 
+        }
+
+        // INICIALIZACIÓN DEL AUDIO REPRODUCTOR
+        function initAudio() {
+            const musicBtn = document.getElementById('musicToggle');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicIcon = document.getElementById('musicIcon');
+
+            musicBtn.addEventListener('click', () => {
+                if (bgMusic.paused) {
+                    bgMusic.play().then(() => {
+                        musicIcon.textContent = "⏸️";
+                        musicBtn.classList.add('animate-pulse');
+                    }).catch(err => {
+                        console.log("Auto-play blocked: interactue con el sitio");
+                    });
+                } else {
+                    bgMusic.pause();
+                    musicIcon.textContent = "🎵";
+                    musicBtn.classList.remove('animate-pulse');
+                }
+            });
+        }
+
+        // INICIALIZACIÓN DE LA GALERÍA DE FONDO (CAMBIO CADA 5 SEGUNDOS)
+        function initBgSlideshow() {
+            const slides = document.querySelectorAll('#bg-slideshow .slideshow-img');
+            let currentSlide = 0;
+            if (slides.length > 0) {
+                slides[currentSlide].classList.remove('opacity-0');
+                slides[currentSlide].classList.add('opacity-100');
+                
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('opacity-100');
+                    slides[currentSlide].classList.add('opacity-0');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.remove('opacity-0');
+                    slides[currentSlide].classList.add('opacity-100');
+                }, 5000);
+            }
+        }
+
         function initSparkles() {
             const container = document.getElementById('sparkles-container');
             for(let i=0; i<40; i++) {
@@ -325,7 +628,7 @@
                 s.className = 'sparkle';
                 s.style.left = Math.random() * 100 + 'vw';
                 s.style.top = Math.random() * 100 + 'vh';
-                s.style.opacity = Math.random() * 0.4;
+                s.style.opacity = Math.random() * 0.3;
                 s.style.animation = `flow ${8 + Math.random() * 15}s linear infinite`;
                 container.appendChild(s);
             }
@@ -334,6 +637,9 @@
         window.onload = () => {
             initAuth();
             initSparkles();
+            initCountdown();
+            initAudio();
+            initBgSlideshow();
         };
     </script>
 </body>
