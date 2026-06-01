@@ -80,6 +80,7 @@
         }
     </style>
 </head>
+</head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 py-10 relative">
     
     <!-- GALERÍA DE FOTOS EN FONDO CON FILTRO GRIS CLARO SUAVE -->
@@ -106,7 +107,7 @@
         <button id="musicToggle" class="w-12 h-12 flex items-center justify-center bg-white/95 border border-gold/40 rounded-full shadow-lg hover:border-gold transition-all duration-300">
             <span id="musicIcon" class="text-xl">🎵</span>
         </button>
-        <audio id="bgMusic" loop>
+        <audio id="bgMusic" loop autoplay>
             <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
         </audio>
     </div>
@@ -124,6 +125,10 @@
             <p class="font-elegant tracking-[0.2em] text-gold-gradient text-sm md:text-xl uppercase">Mis Quince Años</p>
             <h1 class="font-title text-7xl md:text-9xl gold-gradient py-2">Chiara</h1>
             <div class="h-[1px] w-24 bg-gold mx-auto opacity-40"></div>
+            <!-- BOTÓN AGREGADO PARA SCROLLEAR AL FORMULARIO -->
+            <button onclick="document.getElementById('rsvpForm').scrollIntoView({behavior: 'smooth'})" class="mt-6 inline-block bg-white/80 border border-gold/40 text-gold font-semibold text-[10px] px-6 py-2 rounded-full uppercase tracking-widest hover:bg-gold hover:text-white transition-all shadow-md">
+                Llenar información
+            </button>
         </header>
 
         <!-- SECCIÓN DE CUENTA REGRESIVA -->
@@ -186,6 +191,13 @@
                 </a>
             </div>
 
+            <!-- SECCIÓN REGALOS AGREGADA -->
+            <div class="py-4 px-3 border border-gold/20 bg-white/70 rounded-xl text-center space-y-3">
+                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Regalos</p>
+                <p class="text-xs text-amber-950 font-light leading-relaxed">Nada es más importante para mí que tu presencia, pero si quisieras hacerme un presente podrías hacerlo a través de esta cuenta:</p>
+                <p class="text-sm font-bold text-amber-950 tracking-wider">alias.mp</p>
+            </div>
+
             <!-- FORMULARIO DE CONFIRMACIÓN -->
             <div id="rsvpForm" class="space-y-5 pt-2 text-left">
                 <div class="space-y-2">
@@ -213,6 +225,13 @@
                         <input type="text" id="favoriteSong" placeholder="Ej: Nombre de la Canción - Artista" 
                                class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs">
                     </div>
+
+                    <!-- CAMPO DE MENSAJE CORTO AGREGADO -->
+                    <div class="space-y-2">
+                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Dejame un mensaje corto</label>
+                        <input type="text" id="shortMessage" placeholder="Tu mensaje..." 
+                               class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs">
+                    </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3">
@@ -237,8 +256,8 @@
                 <div class="pt-4 border-t border-gold/20 text-center space-y-1.5">
                     <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Dress Code</p>
                     <p class="text-base md:text-lg font-elegant tracking-[0.2em] text-amber-950 font-bold">ELEGANTE</p>
-                    <!-- Nota de advertencia de tonalidades/colores añadida -->
-                    <p class="text-[10px] md:text-xs text-amber-900/90 font-medium px-4 leading-relaxed max-w-sm mx-auto">
+                    <!-- Nota de advertencia de tonalidades/colores añadida EN NEGRITA -->
+                    <p class="text-[10px] md:text-xs text-amber-900/90 font-bold px-4 leading-relaxed max-w-sm mx-auto">
                         ⚠️ Evitar tonalidades claras, así como también colores dorados y plateados.
                     </p>
                 </div>
@@ -390,10 +409,12 @@
 
             let restriction = 'Ninguna';
             let song = '';
+            let shortMsg = '';
 
             if (isAttending) {
                 restriction = document.getElementById('dietaryRestriction').value;
                 song = document.getElementById('favoriteSong').value.trim();
+                shortMsg = document.getElementById('shortMessage').value.trim(); // NUEVO: Captura el mensaje
             }
             
             try {
@@ -403,6 +424,7 @@
                     asiste: isAttending,
                     restricciones: restriction,
                     cancion: song,
+                    mensaje: shortMsg, // NUEVO: Guarda el mensaje en base de datos
                     fecha: serverTimestamp()
                 });
                 rsvpForm.classList.add('hidden');
@@ -416,6 +438,7 @@
             document.getElementById('guestName').value = '';
             document.getElementById('dietaryRestriction').value = 'Ninguna';
             document.getElementById('favoriteSong').value = '';
+            document.getElementById('shortMessage').value = ''; // NUEVO: Resetea el input del mensaje
             document.getElementById('attendingExtras').classList.add('hidden');
             document.getElementById('finalSubmitBlock').classList.add('hidden');
             
@@ -587,13 +610,22 @@
             const bgMusic = document.getElementById('bgMusic');
             const musicIcon = document.getElementById('musicIcon');
 
+            // Intento de reproducir por defecto. 
+            // Si el navegador lo bloquea, se necesita click del usuario.
+            bgMusic.play().then(() => {
+                musicIcon.textContent = "⏸️";
+                musicBtn.classList.add('animate-pulse');
+            }).catch(err => {
+                console.log("Auto-play bloqueado por el navegador, se requiere interacción del usuario.");
+            });
+
             musicBtn.addEventListener('click', () => {
                 if (bgMusic.paused) {
                     bgMusic.play().then(() => {
                         musicIcon.textContent = "⏸️";
                         musicBtn.classList.add('animate-pulse');
                     }).catch(err => {
-                        console.log("Auto-play blocked: interactue con el sitio");
+                        console.log("Error al reproducir audio:", err);
                     });
                 } else {
                     bgMusic.pause();
