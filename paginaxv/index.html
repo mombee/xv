@@ -6,7 +6,7 @@
     <title>Mis XV - Chiara</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
+    
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js" type="module"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js" type="module"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
@@ -17,22 +17,25 @@
             --dark-gold: #96741b;
             --light-gold: #f4e3a4;
             --elegant-dark: #2c2518;
-            --light-bg: #ece9e2; /* Tono gris claro refinado para el fondo */
+            --light-bg: #ece9e2;
         }
         body {
-            background-color: var(--light-bg);
+            background-color: #000; /* Fondo base negro para el hero */
             color: var(--elegant-dark);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
         .font-title { font-family: 'Great Vibes', cursive; }
         .font-elegant { font-family: 'Cinzel', serif; }
         
         .gold-gradient {
-            background: linear-gradient(45deg, #96741b, #c5a028, #f4e3a4, #96741b);
+            background: linear-gradient(45deg, #f4e3a4, #c5a028, #f4e3a4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0px 4px 15px rgba(0,0,0,0.3);
         }
         .btn-gold {
             background: linear-gradient(45deg, var(--dark-gold), var(--gold));
@@ -40,11 +43,9 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
-        .btn-gold:active {
-            transform: scale(0.95);
-        }
+        .btn-gold:active { transform: scale(0.95); }
         .card {
-            background: rgba(234, 229, 218, 0.95); /* Tarjetas un poco más oscuras para mayor contraste */
+            background: rgba(234, 229, 218, 0.95);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(197, 160, 40, 0.35);
@@ -54,56 +55,60 @@
             from { transform: translateY(0); }
             to { transform: translateY(-100vh); }
         }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(15px); }
+        }
+        .animate-bounce-slow { animation: bounce-slow 2s infinite ease-in-out; }
+        
         .sparkle {
             position: absolute;
             width: 3px;
             height: 3px;
-            background: var(--gold);
+            background: var(--light-gold);
             border-radius: 50%;
             pointer-events: none;
+            box-shadow: 0 0 10px var(--gold);
         }
-        .hover-gold:hover {
-            border-color: var(--gold);
-            background: rgba(197, 160, 40, 0.08);
-            transform: translateY(-2px);
-        }
-        /* Estilo optimizado para las imágenes de fondo de la galería */
+        
         .slideshow-img {
-            transition: opacity 1.8s ease-in-out;
-            background-size: cover;
-            background-position: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+        .hero-text-shadow {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 5px 25px rgba(0,0,0,0.6);
         }
-        /* Mobile adjustments */
+        
         @media (max-width: 480px) {
-            .font-title { font-size: 5rem !important; }
+            .font-title { font-size: 5.5rem !important; }
             .card { padding: 1.25rem !important; }
         }
     </style>
 </head>
-</head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 py-10 relative">
+<body class="relative">
     
-    <!-- GALERÍA DE FOTOS EN FONDO CON FILTRO GRIS CLARO SUAVE -->
-    <div id="bg-slideshow" class="fixed inset-0 z-[-2] overflow-hidden bg-[#ece9e2]">
-        <!-- Capas de imágenes con fallbacks de internet y filtro desaturado claro sobre gris arena -->
+    <!-- GALERÍA DE FOTOS EN FONDO -->
+    <!-- Se eliminó el filtro blanco y negro para que la foto se vea entera y a color -->
+    <div id="bg-slideshow" class="fixed inset-0 z-[0] overflow-hidden bg-black">
         <div class="slideshow-img absolute inset-0 opacity-0"
-     style="background-image: url('img/img1.jpg');
-            filter: grayscale(100%) brightness(1.1) contrast(0.9) opacity(0.7);">
-</div>
-
-<div class="slideshow-img absolute inset-0 opacity-0"
-     style="background-image: url('img/img2.jpg');
-            filter: grayscale(100%) brightness(1.1) contrast(0.9) opacity(0.7);">
-</div>
-
-        <!-- Velo degradado gris claro protector para suavizar y asegurar legibilidad -->
-        <div class="absolute inset-0 bg-gradient-to-b from-[#ece9e2]/85 via-[#ece9e2]/65 to-[#ece9e2]/90 z-[-1]"></div>
+             style="background-image: url('img/foto.jpeg'); filter: brightness(0.6);">
+        </div>
+        <div class="slideshow-img absolute inset-0 opacity-0"
+             style="background-image: url('img/foto1.jpeg'); filter: brightness(0.6);">
+        </div>
+        <div class="slideshow-img absolute inset-0 opacity-0"
+             style="background-image: url('img/foto2.jpeg'); filter: brightness(0.6);">
+        </div>
+        <div class="slideshow-img absolute inset-0 opacity-0"
+             style="background-image: url('img/foto3.jpeg'); filter: brightness(0.6);">
+        </div>
     </div>
 
-    <div id="sparkles-container" class="fixed inset-0 pointer-events-none"></div>
+    <div id="sparkles-container" class="fixed inset-0 pointer-events-none z-[1]"></div>
 
     <!-- REPRODUCTOR DE MÚSICA EN LOOP -->
-    <div class="fixed bottom-4 right-4 z-50">
+    <div class="fixed bottom-4 right-4 z-[60]">
         <button id="musicToggle" class="w-12 h-12 flex items-center justify-center bg-white/95 border border-gold/40 rounded-full shadow-lg hover:border-gold transition-all duration-300">
             <span id="musicIcon" class="text-xl">🎵</span>
         </button>
@@ -112,213 +117,269 @@
         </audio>
     </div>
 
-    <!-- BOTÓN ADMIN CON PROTECCIÓN -->
-    <div class="fixed top-4 right-4 z-50">
-        <button id="toggleView" class="text-[10px] text-gray-500 border border-gold/40 bg-white/85 px-3 py-1 rounded-full uppercase tracking-tighter opacity-75 hover:opacity-100 transition-opacity">
+    <!-- BOTÓN ADMIN -->
+    <div class="fixed top-4 right-4 z-[60]">
+        <button onclick="openAdminModal()" id="toggleView" class="text-[10px] text-gray-800 border border-gold/40 bg-white/85 px-3 py-1 rounded-full uppercase tracking-tighter opacity-75 hover:opacity-100 transition-opacity font-semibold">
             Admin
         </button>
     </div>
 
+    <!-- MODAL DE CONTRASEÑA ADMIN (Reemplazo de prompt) -->
+    <div id="adminModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in transition-opacity">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-xs w-full text-center border border-gold/30 mx-4">
+            <h3 class="font-elegant text-gold font-bold mb-2 uppercase tracking-widest text-sm">Panel de Control</h3>
+            <p class="text-xs text-amber-900 mb-6">Ingresa la clave de acceso</p>
+            <input type="password" id="adminPasswordInput" placeholder="••••••••" 
+                   class="w-full border border-gold/30 bg-gray-50 p-3 rounded-xl mb-2 text-center focus:outline-none focus:border-gold text-amber-950 font-medium">
+            <p id="adminError" class="text-red-500 text-[10px] hidden mb-4 font-bold uppercase tracking-wider">Clave incorrecta</p>
+            <div class="flex flex-col gap-3 mt-6">
+                <button onclick="verifyAdminPassword()" class="w-full py-3 text-xs btn-gold rounded-xl uppercase tracking-widest shadow-md">Ingresar</button>
+                <button onclick="closeAdminModal()" class="w-full py-2 text-xs text-amber-900/60 hover:text-amber-900 font-semibold uppercase">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- VISTA INVITACIÓN -->
-    <div id="invitationView" class="w-full max-w-lg text-center space-y-6 md:space-y-8 animate-fade-in">
-        <header class="space-y-2">
-            <p class="font-elegant tracking-[0.2em] text-gold-gradient text-sm md:text-xl uppercase">Mis Quince Años</p>
-            <h1 class="font-title text-7xl md:text-9xl gold-gradient py-2">Chiara</h1>
-            <div class="h-[1px] w-24 bg-gold mx-auto opacity-40"></div>
+    <div id="invitationView" class="w-full">
+        
+        <!-- SECCIÓN 1: PORTADA (HERO) -->
+        <header class="relative z-10 w-full h-[100dvh] flex flex-col items-center justify-center text-center px-4">
+            <div class="space-y-0 animate-fade-in">
+                <p class="font-elegant tracking-[0.3em] text-white/90 text-sm md:text-xl uppercase hero-text-shadow">Mis Quince Años</p>
+                <h1 class="font-title text-8xl md:text-[10rem] text-white py-0 hero-text-shadow leading-tight">Chiara</h1>
+            </div>
+            
+            <!-- Indicador de Scroll -->
+            <div class="absolute bottom-12 flex flex-col items-center animate-bounce-slow text-white/80">
+                <p class="text-[9px] font-elegant uppercase tracking-[0.3em] mb-2 opacity-80 hero-text-shadow">Desliza hacia abajo</p>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </div>
         </header>
 
-        <!-- SECCIÓN DE CUENTA REGRESIVA -->
-        <section class="card p-4 rounded-2xl">
-            <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase mb-2">Faltan tan solo</p>
-            <div class="grid grid-cols-3 gap-2 max-w-xs mx-auto">
-                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
-                    <span id="countdown-days" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
-                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Días</p>
-                </div>
-                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
-                    <span id="countdown-hours" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
-                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Horas</p>
-                </div>
-                <div class="bg-[#dbd5c7] p-2 rounded-lg border border-gold/35 shadow-sm"> <!-- Bloques un poco más oscuros -->
-                    <span id="countdown-minutes" class="font-elegant text-2xl text-amber-950 font-bold">00</span>
-                    <p class="text-[8px] text-amber-900/80 uppercase tracking-widest mt-0.5 font-semibold">Minutos</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="card p-6 md:p-8 rounded-3xl space-y-6">
-            <p class="text-sm md:text-lg font-light leading-relaxed px-2 text-amber-950">
-                ¡Llegó la noche de festejar a lo grande! Quisiera que vengas con todas las ganas de bailar, divertirte y que hagamos de esa noche un recuerdo inolvidable…
-            </p>
+        <!-- SECCIÓN 2: CONTENIDOS (CUESTIONARIO Y DETALLES) -->
+        <div class="relative z-20 w-full bg-[#ece9e2] rounded-t-[40px] shadow-[0_-20px_50px_rgba(0,0,0,0.5)] pt-12 pb-24 px-4 flex flex-col items-center">
             
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4 text-xs md:text-sm font-elegant">
-                    <div class="border-r border-gold/20 text-center">
-                        <p class="text-gold tracking-widest mb-1 font-semibold">FECHA</p>
-                        <p class="text-base md:text-lg text-amber-950 font-bold">21 . 08 . 2026</p>
+            <!-- Pequeño adorno superior -->
+            <div class="w-16 h-1 bg-gold/30 rounded-full absolute top-5 left-1/2 transform -translate-x-1/2"></div>
+
+            <div class="w-full max-w-lg space-y-8">
+                <!-- SECCIÓN DE CUENTA REGRESIVA -->
+                <section class="card p-5 rounded-3xl text-center">
+                    <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Faltan tan solo</p>
+                    <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
+                        <div class="bg-[#dbd5c7] p-3 rounded-xl border border-gold/35 shadow-inner">
+                            <span id="countdown-days" class="font-elegant text-3xl text-amber-950 font-bold">00</span>
+                            <p class="text-[9px] text-amber-900/80 uppercase tracking-widest mt-1 font-semibold">Días</p>
+                        </div>
+                        <div class="bg-[#dbd5c7] p-3 rounded-xl border border-gold/35 shadow-inner">
+                            <span id="countdown-hours" class="font-elegant text-3xl text-amber-950 font-bold">00</span>
+                            <p class="text-[9px] text-amber-900/80 uppercase tracking-widest mt-1 font-semibold">Horas</p>
+                        </div>
+                        <div class="bg-[#dbd5c7] p-3 rounded-xl border border-gold/35 shadow-inner">
+                            <span id="countdown-minutes" class="font-elegant text-3xl text-amber-950 font-bold">00</span>
+                            <p class="text-[9px] text-amber-900/80 uppercase tracking-widest mt-1 font-semibold">Minutos</p>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <p class="text-gold tracking-widest mb-1 font-semibold">HORA</p>
-                        <p class="text-base md:text-lg text-amber-950 font-bold">21:00 HS</p>
-                    </div>
-                </div>
-                <!-- Botón de Calendario -->
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Mis+XV+-+Chiara&dates=20260821T210000/20260822T050000&details=¡Te+espero+para+celebrar+mis+15+años!&location=Salón+Colony,+CABA&sf=true&output=xml" target="_blank" class="inline-block text-[10px] text-gold border border-gold/40 px-4 py-1.5 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-semibold bg-white/50">
-                    📅 Agendar evento
-                </a>
-            </div>
+                </section>
 
-            <!-- Bloque de Lugar con Enlace a Maps -->
-            <a href="https://www.google.com/maps/dir//Colony+Eventos,+Cnel.+Ramón+L.+Falcón+2935,+C1406GOG+Cdad.+Autónoma+de+Buenos+Aires/@-34.6348712,-58.4719752,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x95bcc98f5ae5e6eb:0xce0eb785fcd8edc8!2m2!1d-58.4696918!2d-34.6322417" target="_blank" 
-               class="block py-4 px-3 border border-gold/20 bg-white/70 rounded-xl hover-gold transition-all duration-300">
-                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] mb-1 uppercase font-semibold">Lugar de la fiesta</p>
-                <p class="text-lg md:text-xl font-elegant tracking-wider text-amber-950 font-bold">SALÓN COLONY</p>
-                <p class="text-[10px] md:text-xs text-amber-900 mt-1">Cnel. Ramón L. Falcón 2935, CABA</p>
-                <p class="text-[9px] text-gold mt-2 uppercase tracking-tighter opacity-80 font-semibold">📍 Toca para ver el mapa</p>
-            </a>
-
-            <!-- SECCIÓN QUIERO VER TUS FOTOS -->
-            <div class="py-4 px-3 border border-gold/20 bg-white/70 rounded-xl text-center space-y-3">
-                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Recuerdos compartidos</p>
-                <p class="text-xs text-amber-950 font-light">¡Ayúdame a capturar momentos! Sube todas tus fotos y videos del evento aquí:</p>
-                <a href="https://drive.google.com/drive/folders/1pZjBb0p9KDOUeHsgoIFI933f3xX4hoPS?usp=drive_link" target="_blank" 
-                   class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-500 text-white font-semibold text-xs py-2.5 px-6 rounded-full uppercase tracking-wider transition-all duration-300 shadow-md">
-                    📸 Compartir fotos
-                </a>
-            </div>
-
-            <!-- SECCIÓN REGALOS AGREGADA -->
-            <div class="py-4 px-3 border border-gold/20 bg-white/70 rounded-xl text-center space-y-3">
-                <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Regalos</p>
-                <p class="text-xs text-amber-950 font-light leading-relaxed">Nada es más importante para mí que tu presencia, pero si quisieras hacerme un presente podrías hacerlo a través de esta cuenta:</p>
-                <p class="text-sm font-bold text-amber-950 tracking-wider">alias.mp</p>
-            </div>
-
-            <!-- FORMULARIO DE CONFIRMACIÓN -->
-            <div id="rsvpForm" class="space-y-5 pt-2 text-left">
-                <div class="space-y-2">
-                    <label class="block text-[10px] text-gold font-elegant uppercase tracking-widest text-center font-semibold">Confirma tu asistencia</label>
-                    <input type="text" id="guestName" placeholder="Nombre y Apellido" 
-                           class="w-full bg-white/95 border border-gold/40 p-4 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-center text-sm transition-all shadow-sm">
-                </div>
-                
-                <!-- SECTORES CONDICIONALES PARA ASISTENTES -->
-                <div id="attendingExtras" class="hidden space-y-4 p-4 border border-gold/20 bg-white/90 rounded-2xl animate-fade-in shadow-inner">
-                    <div class="space-y-2">
-                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Restricciones en la alimentación</label>
-                        <select id="dietaryRestriction" class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs font-medium">
-                            <option value="Ninguna">Ninguna</option>
-                            <option value="Celíaco">Celíaco</option>
-                            <option value="Diabetes">Diabetes</option>
-                            <option value="Intolerante a la lactosa">Intolerante a la lactosa</option>
-                            <option value="Vegetariano">Vegetariano</option>
-                            <option value="Vegano">Vegano</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Canción que no puede faltar</label>
-                        <input type="text" id="favoriteSong" placeholder="Ej: Nombre de la Canción - Artista" 
-                               class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs">
-                    </div>
-
-                    <!-- CAMPO DE MENSAJE CORTO AGREGADO -->
-                    <div class="space-y-2">
-                        <label class="block text-[10px] text-gold font-elegant uppercase tracking-wider font-semibold">Dejame un mensaje corto</label>
-                        <input type="text" id="shortMessage" placeholder="Tu mensaje..." 
-                               class="w-full bg-white border border-gold/30 p-3 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-xs">
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button onclick="handleAttendanceClick(true)" id="btnAsistire" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs shadow-lg transition-all font-semibold">
-                        Asistiré
-                    </button>
-                    <button onclick="submitRSVP(false)" id="btnNoAsistire" class="border border-gold/30 text-amber-900 bg-white/40 hover:text-red-700 hover:bg-red-50 w-full py-4 rounded-xl uppercase tracking-widest text-xs transition-colors font-medium">
-                        No podré ir
-                    </button>
-                </div>
-
-                <!-- Botón definitivo de confirmación que aparece al elegir asistir -->
-                <div id="finalSubmitBlock" class="hidden">
-                    <button onclick="submitRSVP(true)" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-xs shadow-xl font-bold border border-gold">
-                        Confirmar Asistencia ✅
-                    </button>
-                </div>
-                
-                <p id="statusMsg" class="text-center text-[10px] italic text-amber-900 min-h-[1rem] font-medium"></p>
-
-                <!-- Sección Dress Code Simplificada -->
-                <div class="pt-4 border-t border-gold/20 text-center space-y-1.5">
-                    <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-semibold">Dress Code</p>
-                    <p class="text-base md:text-lg font-elegant tracking-[0.2em] text-amber-950 font-bold">ELEGANTE</p>
-                    <!-- Nota de advertencia de tonalidades/colores añadida EN NEGRITA -->
-                    <p class="text-[10px] md:text-xs text-amber-900/90 font-bold px-4 leading-relaxed max-w-sm mx-auto">
-                        ⚠️ Evitar tonalidades claras, así como también colores dorados y plateados.
+                <section class="card p-6 md:p-8 rounded-3xl space-y-8">
+                    <p class="text-sm md:text-lg font-light leading-relaxed px-2 text-amber-950 text-center">
+                        ¡Llegó la noche de festejar a lo grande! Quisiera que vengas con todas las ganas de bailar, divertirte y que hagamos de esa noche un recuerdo inolvidable…
                     </p>
-                </div>
-                
-                <div class="p-3 border border-gold/20 rounded-xl bg-white/60 text-center shadow-inner">
-                    <p class="text-[9px] md:text-[10px] text-amber-900 font-elegant uppercase tracking-widest leading-relaxed font-semibold">
-                        ⚠️ Grupo familiar: completar una vez por cada integrante para asegurar su lugar.
-                    </p>
-                </div>
-            </div>
+                    
+                    <div class="space-y-5">
+                        <div class="grid grid-cols-2 gap-4 text-xs md:text-sm font-elegant">
+                            <div class="border-r border-gold/20 text-center">
+                                <p class="text-gold tracking-widest mb-1 font-semibold">FECHA</p>
+                                <p class="text-lg md:text-xl text-amber-950 font-bold">21 . 08 . 2026</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gold tracking-widest mb-1 font-semibold">HORA</p>
+                                <p class="text-lg md:text-xl text-amber-950 font-bold">21:00 HS</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Botón de Calendario -->
+                        <div class="text-center">
+                            <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Mis+XV+-+Chiara&dates=20260821T210000/20260822T050000&details=¡Te+espero+para+celebrar+mis+15+años!&location=Salón+Colony,+CABA&sf=true&output=xml" target="_blank" class="inline-block text-[10px] text-gold border border-gold/40 px-5 py-2 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-semibold bg-white/50 shadow-sm">
+                                📅 Agendar evento
+                            </a>
+                        </div>
+                    </div>
 
-            <div id="successMsg" class="hidden space-y-4 py-10 animate-pulse">
-                <p class="text-gold font-title text-4xl md:text-5xl">¡Gracias!</p>
-                <p class="text-xs md:text-sm text-amber-900 font-medium">Tu respuesta ha sido registrada.</p>
-                <button onclick="resetForm()" class="mt-4 text-[10px] text-gold border border-gold/40 px-6 py-2 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-semibold bg-white/85">
-                    Registrar otro familiar
-                </button>
-            </div>
-        </section>
+                    <!-- Bloque de Lugar con Enlace a Maps -->
+                    <a href="https://www.google.com/maps/dir//Colony+Eventos,+Cnel.+Ramón+L.+Falcón+2935,+C1406GOG+Cdad.+Autónoma+de+Buenos+Aires/@-34.6348712,-58.4719752,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x95bcc98f5ae5e6eb:0xce0eb785fcd8edc8!2m2!1d-58.4696918!2d-34.6322417" target="_blank" 
+                       class="block py-5 px-4 border border-gold/30 bg-white/70 rounded-2xl hover-gold transition-all duration-300 text-center shadow-sm">
+                        <p class="text-gold font-elegant text-[10px] tracking-[0.3em] mb-2 uppercase font-semibold">Lugar de la fiesta</p>
+                        <p class="text-xl md:text-2xl font-elegant tracking-wider text-amber-950 font-bold">SALÓN COLONY</p>
+                        <p class="text-[11px] md:text-xs text-amber-900 mt-2">Cnel. Ramón L. Falcón 2935, CABA</p>
+                        <div class="inline-block mt-3 bg-gold/10 text-gold px-3 py-1 rounded-full">
+                            <p class="text-[9px] uppercase tracking-wider font-bold">📍 Toca para ver ruta</p>
+                        </div>
+                    </a>
 
-        <footer class="opacity-40 text-[9px] tracking-[0.3em] font-elegant uppercase text-amber-950 font-bold">
-            Te esperamos con alegría
-        </footer>
+                    <!-- SECCIÓN QUIERO VER TUS FOTOS -->
+                    <div class="py-5 px-4 border border-gold/20 bg-white/70 rounded-2xl text-center space-y-4 shadow-sm">
+                        <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-bold">Recuerdos compartidos</p>
+                        <p class="text-xs text-amber-950 font-medium px-4">¡Ayúdame a capturar momentos! Sube todas tus fotos y videos del evento aquí:</p>
+                        <a href="https://drive.google.com/drive/folders/1pZjBb0p9KDOUeHsgoIFI933f3xX4hoPS?usp=drive_link" target="_blank" 
+                           class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-500 text-white font-bold text-[10px] py-3 px-6 rounded-full uppercase tracking-widest transition-all duration-300 shadow-md">
+                            📸 Compartir fotos
+                        </a>
+                    </div>
+
+                    <!-- SECCIÓN REGALOS -->
+                    <div class="py-5 px-4 border border-gold/20 bg-white/70 rounded-2xl text-center space-y-3 shadow-sm">
+                        <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-bold">Regalos</p>
+                        <p class="text-xs text-amber-950 font-medium leading-relaxed px-2">Nada es más importante para mí que tu presencia, pero si quisieras hacerme un presente podrías hacerlo a través de esta cuenta:</p>
+                        <div class="bg-white/80 inline-block px-6 py-2 rounded-lg border border-gold/20 mt-2">
+                            <p class="text-sm font-bold text-amber-950 tracking-wider">alias.mp</p>
+                        </div>
+                    </div>
+
+                    <!-- FORMULARIO DE CONFIRMACIÓN -->
+                    <div id="rsvpForm" class="space-y-6 pt-4 text-left border-t border-gold/20">
+                        <div class="text-center mb-6">
+                            <h3 class="font-elegant text-xl text-gold font-bold uppercase tracking-widest">Confirma tu Asistencia</h3>
+                            <p class="text-[10px] text-amber-900 mt-2 uppercase tracking-wider font-semibold">Completa los datos a continuación</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider pl-2">Nombre y Apellido del Invitado</label>
+                            <input type="text" id="guestName" placeholder="Ej: Juan Pérez" 
+                                   class="w-full bg-white/95 border border-gold/40 p-4 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm transition-all shadow-sm">
+                        </div>
+                        
+                        <!-- SECTORES CONDICIONALES PARA ASISTENTES -->
+                        <div id="attendingExtras" class="hidden space-y-5 p-5 border border-gold/30 bg-white/90 rounded-2xl animate-fade-in shadow-md">
+                            <div class="space-y-2">
+                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Restricciones en la alimentación</label>
+                                <select id="dietaryRestriction" class="w-full bg-white border border-gold/30 p-3.5 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm font-medium shadow-sm">
+                                    <option value="Ninguna">Ninguna</option>
+                                    <option value="Celíaco">Celíaco</option>
+                                    <option value="Diabetes">Diabetes</option>
+                                    <option value="Intolerante a la lactosa">Intolerante a la lactosa</option>
+                                    <option value="Vegetariano">Vegetariano</option>
+                                    <option value="Vegano">Vegano</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Canción que no puede faltar</label>
+                                <input type="text" id="favoriteSong" placeholder="Ej: Nombre de la Canción - Artista" 
+                                       class="w-full bg-white border border-gold/30 p-3.5 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm shadow-sm">
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Dejame un mensaje corto</label>
+                                <input type="text" id="shortMessage" placeholder="Tu mensaje..." 
+                                       class="w-full bg-white border border-gold/30 p-3.5 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm shadow-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button onclick="handleAttendanceClick(true)" id="btnAsistire" class="btn-gold w-full py-4 rounded-xl uppercase tracking-widest text-[11px] shadow-lg transition-all font-bold">
+                                Asistiré
+                            </button>
+                            <button onclick="submitRSVP(false)" id="btnNoAsistire" class="border border-gold/40 text-amber-900 bg-white hover:text-red-700 hover:bg-red-50 w-full py-4 rounded-xl uppercase tracking-widest text-[11px] transition-colors font-bold shadow-sm">
+                                No podré ir
+                            </button>
+                        </div>
+
+                        <!-- Botón definitivo de confirmación que aparece al elegir asistir -->
+                        <div id="finalSubmitBlock" class="hidden pt-4 border-t border-gold/10">
+                            <button onclick="submitRSVP(true)" class="bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white w-full py-4 rounded-xl uppercase tracking-widest text-[11px] shadow-xl font-bold transition-all">
+                                Confirmar y Enviar Datos ✅
+                            </button>
+                        </div>
+                        
+                        <p id="statusMsg" class="text-center text-[11px] font-bold text-red-600 min-h-[1rem]"></p>
+
+                        <!-- Sección Dress Code Simplificada -->
+                        <div class="pt-6 border-t border-gold/20 text-center space-y-2">
+                            <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-bold">Dress Code</p>
+                            <p class="text-lg md:text-xl font-elegant tracking-[0.2em] text-amber-950 font-bold">ELEGANTE</p>
+                            <p class="text-[10px] md:text-[11px] text-amber-900 font-bold px-2 leading-relaxed max-w-sm mx-auto bg-amber-500/10 py-2 rounded-lg border border-amber-500/20">
+                                ⚠️ Evitar tonalidades claras, así como también colores dorados y plateados.
+                            </p>
+                        </div>
+                        
+                        <div class="p-4 border border-gold/30 rounded-xl bg-white/80 text-center shadow-inner mt-6">
+                            <p class="text-[9px] md:text-[10px] text-amber-950 font-elegant uppercase tracking-widest leading-relaxed font-bold">
+                                IMPORTANTE: Grupo familiar completar una vez por cada integrante para asegurar su lugar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje de Éxito -->
+                    <div id="successMsg" class="hidden space-y-5 py-12 animate-pulse text-center">
+                        <p class="text-gold font-title text-5xl md:text-6xl drop-shadow-sm">¡Gracias!</p>
+                        <p class="text-sm md:text-base text-amber-950 font-bold">Tu respuesta ha sido registrada exitosamente.</p>
+                        <button onclick="resetForm()" class="mt-6 text-[10px] text-gold border border-gold/40 px-6 py-3 rounded-full uppercase tracking-widest hover:bg-gold/10 transition-all font-bold bg-white shadow-sm inline-block">
+                            Registrar otro familiar
+                        </button>
+                    </div>
+                </section>
+
+                <footer class="opacity-50 text-[10px] tracking-[0.3em] font-elegant uppercase text-amber-950 font-bold text-center pb-8">
+                    Te esperamos con alegría
+                </footer>
+            </div>
+        </div>
     </div>
 
     <!-- VISTA ADMIN -->
-    <div id="adminView" class="hidden w-full max-w-4xl py-6 animate-fade-in">
-        <div class="card p-4 md:p-6 rounded-2xl overflow-hidden bg-white/95">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+    <div id="adminView" class="hidden absolute top-0 left-0 w-full min-h-screen bg-[#ece9e2] z-[70] p-4 py-12 animate-fade-in flex-col items-center">
+        
+        <div class="w-full max-w-5xl mb-6 flex justify-between items-center">
+            <h2 class="font-elegant text-2xl text-gold font-bold uppercase tracking-widest">Panel de Control</h2>
+            <button onclick="closeAdminView()" class="text-xs bg-white border border-gold text-amber-950 px-4 py-2 rounded-full font-bold uppercase tracking-wider hover:bg-gold hover:text-white transition-all shadow-sm">
+                Cerrar Panel
+            </button>
+        </div>
+
+        <div class="card p-5 md:p-8 rounded-3xl overflow-hidden bg-white/95 w-full max-w-5xl shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 border-b border-gold/20 pb-6">
                 <div>
-                    <h2 class="font-elegant text-xl text-gold font-bold">Panel de Control</h2>
-                    <p class="text-[10px] text-amber-950 uppercase mt-1 font-semibold">Exclusivo para organizadores</p>
+                    <p class="text-xs text-amber-900 uppercase font-bold tracking-widest">Base de datos de invitados</p>
+                    <p class="text-[10px] text-amber-950 mt-1 font-medium">Nueva lista (Lista anterior archivada)</p>
                 </div>
-                <div class="flex gap-2">
-                    <span id="guestCount" class="bg-gold text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase shadow">0 ASISTIRÁN</span>
+                <div class="flex gap-3">
+                    <span id="guestCount" class="bg-gradient-to-r from-amber-600 to-yellow-500 text-white px-4 py-2 rounded-full text-xs font-bold uppercase shadow-md tracking-wider">
+                        0 ASISTIRÁN
+                    </span>
                 </div>
             </div>
 
             <!-- Filtros del administrador -->
-            <div class="flex flex-wrap gap-2 mb-6 border-b border-gold/20 pb-4">
-                <button onclick="filterAdminTable('all')" id="filterBtn-all" class="text-[10px] border border-gold text-gold bg-gold/10 px-3 py-1.5 rounded-full uppercase tracking-widest font-bold transition-all">
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button onclick="filterAdminTable('all')" id="filterBtn-all" class="text-[10px] border border-gold text-gold bg-gold/10 px-4 py-2 rounded-full uppercase tracking-widest font-bold transition-all shadow-sm">
                     👥 Quienes Votaron
                 </button>
-                <button onclick="filterAdminTable('restrictions')" id="filterBtn-restrictions" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium">
-                    🥗 Restricciones Alimentarias
+                <button onclick="filterAdminTable('restrictions')" id="filterBtn-restrictions" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold hover:border-gold bg-white px-4 py-2 rounded-full uppercase tracking-widest transition-all font-bold shadow-sm">
+                    🥗 Restricciones
                 </button>
-                <button onclick="filterAdminTable('songs')" id="filterBtn-songs" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium">
-                    🎵 Canciones sugeridas
+                <button onclick="filterAdminTable('songs')" id="filterBtn-songs" class="text-[10px] border border-gold/30 text-amber-950 hover:text-gold hover:border-gold bg-white px-4 py-2 rounded-full uppercase tracking-widest transition-all font-bold shadow-sm">
+                    🎵 Canciones / Mensajes
                 </button>
             </div>
             
-            <div class="overflow-x-auto -mx-4 md:mx-0">
-                <table class="w-full text-left text-[11px] md:text-sm">
-                    <thead class="border-b border-gold/20 text-gold uppercase text-[9px] tracking-widest">
+            <div class="overflow-x-auto bg-white rounded-xl border border-gold/20 shadow-inner">
+                <table class="w-full text-left text-xs md:text-sm">
+                    <thead class="border-b border-gold/30 bg-gold/5 text-gold uppercase text-[10px] tracking-widest font-bold">
                         <tr id="adminTableHeader">
                             <th class="p-4">Invitado</th>
-                            <th class="p-4">Estado</th>
+                            <th class="p-4 text-center">Estado</th>
                             <th class="p-4">Restricciones</th>
                             <th class="p-4">Canción Favorita</th>
-                            <th class="p-4 text-right">Fecha</th>
+                            <th class="p-4">Mensaje</th>
                         </tr>
                     </thead>
                     <tbody id="guestTableBody" class="divide-y divide-amber-900/10 text-amber-950">
                         <tr>
-                            <td colspan="5" class="p-10 text-center text-amber-900/60 font-medium">Cargando...</td>
+                            <td colspan="5" class="p-12 text-center text-amber-900/60 font-bold uppercase tracking-widest">Cargando datos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -346,7 +407,9 @@
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'chiara-xv-mobile-app';
 
-        // CLAVE DE ACCESO ADMIN
+        // NUEVA COLECCIÓN: Esto reinicia visualmente la base de datos dejando los datos viejos atrás.
+        const COLLECTION_NAME = 'invitados_chiara_xv_v2';
+
         const ADMIN_PASSWORD = "chiara2026"; 
 
         let userAuthenticated = false;
@@ -361,6 +424,10 @@
         const statusMsg = document.getElementById('statusMsg');
         const guestTableBody = document.getElementById('guestTableBody');
         const guestCountBadge = document.getElementById('guestCount');
+
+        const adminModal = document.getElementById('adminModal');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const adminError = document.getElementById('adminError');
 
         const initAuth = async () => {
             try {
@@ -379,7 +446,6 @@
             }
         });
 
-        // CONTROLADOR DE CLIC EN ASISTIRÉ
         window.handleAttendanceClick = (isAttending) => {
             const extraSection = document.getElementById('attendingExtras');
             const submitBlock = document.getElementById('finalSubmitBlock');
@@ -389,7 +455,6 @@
             extraSection.classList.remove('hidden');
             submitBlock.classList.remove('hidden');
             
-            // Visuales de Selección
             btnAsistire.classList.add('opacity-40');
             btnNoAsistire.classList.add('hidden');
         };
@@ -397,10 +462,13 @@
         window.submitRSVP = async (isAttending) => {
             const name = document.getElementById('guestName').value.trim();
             if (!name) {
-                statusMsg.textContent = "Ingresa tu nombre";
+                statusMsg.textContent = "Por favor, ingresa tu Nombre y Apellido.";
                 return;
             }
-            if (!userAuthenticated) return;
+            if (!userAuthenticated) {
+                statusMsg.textContent = "Conectando al servidor, intenta en unos segundos...";
+                return;
+            }
             statusMsg.textContent = "Procesando...";
 
             let restriction = 'Ninguna';
@@ -410,23 +478,25 @@
             if (isAttending) {
                 restriction = document.getElementById('dietaryRestriction').value;
                 song = document.getElementById('favoriteSong').value.trim();
-                shortMsg = document.getElementById('shortMessage').value.trim(); // NUEVO: Captura el mensaje
+                shortMsg = document.getElementById('shortMessage').value.trim();
             }
             
             try {
-                const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', 'invitados');
+                const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
                 await addDoc(guestsCol, {
                     nombre: name,
                     asiste: isAttending,
                     restricciones: restriction,
                     cancion: song,
-                    mensaje: shortMsg, // NUEVO: Guarda el mensaje en base de datos
+                    mensaje: shortMsg,
                     fecha: serverTimestamp()
                 });
                 rsvpForm.classList.add('hidden');
                 successMsg.classList.remove('hidden');
+                document.getElementById('bg-slideshow').scrollIntoView({behavior: 'smooth'}); // Scroll a top tras confirmar
             } catch (err) {
-                statusMsg.textContent = "Error al conectar";
+                console.error(err);
+                statusMsg.textContent = "Error de conexión. Intenta de nuevo.";
             }
         };
 
@@ -434,7 +504,7 @@
             document.getElementById('guestName').value = '';
             document.getElementById('dietaryRestriction').value = 'Ninguna';
             document.getElementById('favoriteSong').value = '';
-            document.getElementById('shortMessage').value = ''; // NUEVO: Resetea el input del mensaje
+            document.getElementById('shortMessage').value = '';
             document.getElementById('attendingExtras').classList.add('hidden');
             document.getElementById('finalSubmitBlock').classList.add('hidden');
             
@@ -448,17 +518,42 @@
             rsvpForm.classList.remove('hidden');
         };
 
-        // GESTIÓN DEL FILTRADO EN TIEMPO REAL PARA EL ADMIN
+        window.openAdminModal = () => {
+            adminPasswordInput.value = '';
+            adminError.classList.add('hidden');
+            adminModal.classList.remove('hidden');
+        };
+
+        window.closeAdminModal = () => {
+            adminModal.classList.add('hidden');
+        };
+
+        window.verifyAdminPassword = () => {
+            if (adminPasswordInput.value === ADMIN_PASSWORD) {
+                closeAdminModal();
+                invitationView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            } else {
+                adminError.classList.remove('hidden');
+            }
+        };
+
+        window.closeAdminView = () => {
+            adminView.classList.add('hidden');
+            invitationView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        };
+
         window.filterAdminTable = (filter) => {
             activeFilter = filter;
             
-            // Actualizar botones visuales de filtro
             ['all', 'restrictions', 'songs'].forEach(f => {
                 const btn = document.getElementById(`filterBtn-${f}`);
                 if (f === filter) {
-                    btn.className = "text-[10px] border border-gold text-gold bg-gold/10 px-3 py-1.5 rounded-full uppercase tracking-widest font-bold transition-all";
+                    btn.className = "text-[10px] border border-gold text-gold bg-gold/10 px-4 py-2 rounded-full uppercase tracking-widest font-bold transition-all shadow-sm";
                 } else {
-                    btn.className = "text-[10px] border border-gold/30 text-amber-950 hover:text-gold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all font-medium";
+                    btn.className = "text-[10px] border border-gold/30 text-amber-950 hover:text-gold hover:border-gold bg-white px-4 py-2 rounded-full uppercase tracking-widest transition-all font-bold shadow-sm";
                 }
             });
 
@@ -469,67 +564,64 @@
             guestTableBody.innerHTML = '';
             
             if (allGuestsData.length === 0) {
-                guestTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-amber-900/60 font-medium">No hay respuestas registradas</td></tr>';
+                guestTableBody.innerHTML = '<tr><td colspan="5" class="p-12 text-center text-amber-900/60 font-bold uppercase tracking-widest">La lista está limpia. No hay registros aún.</td></tr>';
                 return;
             }
 
-            // Cambiar los headers según el filtro
             const headerRow = document.getElementById('adminTableHeader');
             if (activeFilter === 'restrictions') {
                 headerRow.innerHTML = `
                     <th class="p-4">Invitado</th>
-                    <th class="p-4">Asiste</th>
+                    <th class="p-4 text-center">Asiste</th>
                     <th class="p-4">Restricciones Alimentarias</th>
                 `;
             } else if (activeFilter === 'songs') {
                 headerRow.innerHTML = `
                     <th class="p-4">Invitado</th>
                     <th class="p-4">Canción Sugerida</th>
+                    <th class="p-4">Mensaje</th>
                 `;
             } else {
                 headerRow.innerHTML = `
                     <th class="p-4">Invitado</th>
-                    <th class="p-4">Estado</th>
+                    <th class="p-4 text-center">Estado</th>
                     <th class="p-4">Restricciones</th>
-                    <th class="p-4">Canción Favorita</th>
-                    <th class="p-4 text-right">Fecha</th>
+                    <th class="p-4">Canción</th>
+                    <th class="p-4">Mensaje</th>
                 `;
             }
 
             allGuestsData.forEach(d => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b border-amber-950/10";
+                tr.className = "border-b border-amber-950/5 hover:bg-gold/5 transition-colors";
+
+                const statusBadge = d.asiste 
+                    ? '<span class="bg-green-100 text-green-800 border border-green-200 px-3 py-1 rounded-full text-[9px] font-bold uppercase shadow-sm">Sí Asiste</span>' 
+                    : '<span class="bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-full text-[9px] font-bold uppercase shadow-sm">No asiste</span>';
 
                 if (activeFilter === 'restrictions') {
                     const restriccionFormateada = d.restricciones && d.restricciones !== 'Ninguna' 
-                        ? `<span class="bg-amber-600/20 text-amber-800 px-2 py-0.5 rounded font-bold">${d.restricciones}</span>` 
-                        : `<span class="text-gray-500 font-medium">Ninguna</span>`;
+                        ? `<span class="bg-amber-100 text-amber-900 border border-amber-300 px-2 py-1 rounded font-bold">${d.restricciones}</span>` 
+                        : `<span class="text-gray-400 font-medium">Ninguna</span>`;
                     
                     tr.innerHTML = `
-                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
-                        <td class="p-4">
-                            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${d.asiste ? 'bg-green-600/20 text-green-700' : 'bg-red-600/20 text-red-700'}">
-                                ${d.asiste ? 'SI' : 'NO'}
-                            </span>
-                        </td>
+                        <td class="p-4 font-bold text-amber-950">${d.nombre}</td>
+                        <td class="p-4 text-center">${statusBadge}</td>
                         <td class="p-4">${restriccionFormateada}</td>
                     `;
                 } else if (activeFilter === 'songs') {
                     tr.innerHTML = `
-                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
-                        <td class="p-4 text-gold italic font-medium">${d.cancion ? d.cancion : '<span class="text-gray-400">- Sin sugerencia -</span>'}</td>
+                        <td class="p-4 font-bold text-amber-950">${d.nombre}</td>
+                        <td class="p-4 text-gold font-bold italic">${d.cancion || '<span class="text-gray-300 font-normal">-</span>'}</td>
+                        <td class="p-4 text-amber-900 text-xs italic">"${d.mensaje || ''}"</td>
                     `;
                 } else {
                     tr.innerHTML = `
-                        <td class="p-4 font-semibold text-amber-950">${d.nombre}</td>
-                        <td class="p-4">
-                            <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${d.asiste ? 'bg-green-600/20 text-green-700' : 'bg-red-600/20 text-red-700'}">
-                                ${d.asiste ? 'SI' : 'NO'}
-                            </span>
-                        </td>
+                        <td class="p-4 font-bold text-amber-950">${d.nombre}</td>
+                        <td class="p-4 text-center">${statusBadge}</td>
                         <td class="p-4 text-amber-900 font-medium text-xs">${d.restricciones || 'Ninguna'}</td>
-                        <td class="p-4 text-gold italic text-xs font-medium">${d.cancion || '-'}</td>
-                        <td class="p-4 text-right text-gray-500 text-[9px] font-semibold">${d.fecha ? new Date(d.fecha.toDate()).toLocaleDateString() : '...'}</td>
+                        <td class="p-4 text-gold font-medium text-xs truncate max-w-[120px]" title="${d.cancion}">${d.cancion || '-'}</td>
+                        <td class="p-4 text-amber-950 text-xs italic truncate max-w-[150px]" title="${d.mensaje}">"${d.mensaje || ''}"</td>
                     `;
                 }
                 guestTableBody.appendChild(tr);
@@ -538,7 +630,7 @@
 
         function startListening() {
             if (!userAuthenticated) return;
-            const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', 'invitados');
+            const guestsCol = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
             unsubscribeList = onSnapshot(guestsCol, (snapshot) => {
                 allGuestsData = [];
                 let total = 0;
@@ -549,30 +641,17 @@
                     allGuestsData.push(data);
                 });
 
+                // Ordenar por fecha descendente
+                allGuestsData.sort((a, b) => {
+                    if(!a.fecha || !b.fecha) return 0;
+                    return b.fecha.toMillis() - a.fecha.toMillis();
+                });
+
                 guestCountBadge.textContent = `${total} ASISTIRÁN`;
                 renderAdminTable();
             });
         }
 
-        // ACCESO AL PANEL DE ADMINISTRACIÓN
-        document.getElementById('toggleView').addEventListener('click', () => {
-            if (adminView.classList.contains('hidden')) {
-                const pass = prompt("Introduce la clave de administrador:");
-                if (pass === ADMIN_PASSWORD) {
-                    invitationView.classList.add('hidden');
-                    adminView.classList.remove('hidden');
-                    document.getElementById('toggleView').textContent = "Volver";
-                } else if (pass !== null) {
-                    alert("Clave incorrecta");
-                }
-            } else {
-                adminView.classList.add('hidden');
-                invitationView.classList.remove('hidden');
-                document.getElementById('toggleView').textContent = "Admin";
-            }
-        });
-
-        // INICIALIZACIÓN DE LA CUENTA REGRESIVA EN TIEMPO REAL
         function initCountdown() {
             const targetDate = new Date("Aug 21, 2026 21:00:00").getTime();
 
@@ -600,19 +679,16 @@
             setInterval(updateCountdown, 60000); 
         }
 
-        // INICIALIZACIÓN DEL AUDIO REPRODUCTOR
         function initAudio() {
             const musicBtn = document.getElementById('musicToggle');
             const bgMusic = document.getElementById('bgMusic');
             const musicIcon = document.getElementById('musicIcon');
 
-            // Intento de reproducir por defecto. 
-            // Si el navegador lo bloquea, se necesita click del usuario.
             bgMusic.play().then(() => {
                 musicIcon.textContent = "⏸️";
                 musicBtn.classList.add('animate-pulse');
             }).catch(err => {
-                console.log("Auto-play bloqueado por el navegador, se requiere interacción del usuario.");
+                console.log("Auto-play bloqueado.");
             });
 
             musicBtn.addEventListener('click', () => {
@@ -620,9 +696,7 @@
                     bgMusic.play().then(() => {
                         musicIcon.textContent = "⏸️";
                         musicBtn.classList.add('animate-pulse');
-                    }).catch(err => {
-                        console.log("Error al reproducir audio:", err);
-                    });
+                    }).catch(err => console.log(err));
                 } else {
                     bgMusic.pause();
                     musicIcon.textContent = "🎵";
@@ -631,7 +705,6 @@
             });
         }
 
-        // INICIALIZACIÓN DE LA GALERÍA DE FONDO (CAMBIO CADA 5 SEGUNDOS)
         function initBgSlideshow() {
             const slides = document.querySelectorAll('#bg-slideshow .slideshow-img');
             let currentSlide = 0;
@@ -651,13 +724,13 @@
 
         function initSparkles() {
             const container = document.getElementById('sparkles-container');
-            for(let i=0; i<40; i++) {
+            for(let i=0; i<30; i++) {
                 const s = document.createElement('div');
                 s.className = 'sparkle';
                 s.style.left = Math.random() * 100 + 'vw';
                 s.style.top = Math.random() * 100 + 'vh';
-                s.style.opacity = Math.random() * 0.3;
-                s.style.animation = `flow ${8 + Math.random() * 15}s linear infinite`;
+                s.style.opacity = Math.random() * 0.5 + 0.2;
+                s.style.animation = `flow ${10 + Math.random() * 15}s linear infinite`;
                 container.appendChild(s);
             }
         }
