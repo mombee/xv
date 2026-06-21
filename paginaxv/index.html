@@ -71,11 +71,23 @@
             box-shadow: 0 0 10px var(--gold);
         }
         
+        /* AJUSTE RESPONSIVE DE LAS IMÁGENES DE FONDO */
         .slideshow-img {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+            background-size: cover;
+            background-position: center center; /* Por defecto para celular (centrado) */
+            background-repeat: no-repeat;
+        }
+        
+        /* En pantallas más anchas (computadoras), subimos el enfoque de la imagen */
+        @media (min-width: 768px) {
+            .slideshow-img {
+                /* El 15% empuja el "centro" hacia la parte superior. 
+                   0% es el tope arriba, 50% es el centro exacto. 
+                   Puedes cambiar este número a 10% o 20% según dónde esté tu cara en la foto */
+                background-position: center 15%; 
+            }
+        }
+
         .hero-text-shadow {
             text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 5px 25px rgba(0,0,0,0.6);
         }
@@ -89,7 +101,6 @@
 <body class="relative">
     
     <!-- GALERÍA DE FOTOS EN FONDO -->
-    <!-- Se eliminó el filtro blanco y negro para que la foto se vea entera y a color -->
     <div id="bg-slideshow" class="fixed inset-0 z-[0] overflow-hidden bg-black">
         <div class="slideshow-img absolute inset-0 opacity-0"
              style="background-image: url('img/foto.jpeg'); filter: brightness(0.6);">
@@ -264,13 +275,13 @@
                             </div>
 
                             <div class="space-y-2">
-                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Canción que no puede faltar</label>
+                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Canción que no puede faltar (opcional)</label>
                                 <input type="text" id="favoriteSong" placeholder="Ej: Nombre de la Canción - Artista" 
                                        class="w-full bg-white border border-gold/30 p-3.5 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm shadow-sm">
                             </div>
 
                             <div class="space-y-2">
-                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Dejame un mensaje corto</label>
+                                <label class="block text-[10px] text-amber-950 font-bold uppercase tracking-wider">Mensaje corto (opcional)</label>
                                 <input type="text" id="shortMessage" placeholder="Tu mensaje..." 
                                        class="w-full bg-white border border-gold/30 p-3.5 rounded-xl focus:outline-none focus:border-gold text-amber-950 text-sm shadow-sm">
                             </div>
@@ -299,7 +310,7 @@
                             <p class="text-gold font-elegant text-[10px] tracking-[0.3em] uppercase font-bold">Dress Code</p>
                             <p class="text-lg md:text-xl font-elegant tracking-[0.2em] text-amber-950 font-bold">ELEGANTE</p>
                             <p class="text-[10px] md:text-[11px] text-amber-900 font-bold px-2 leading-relaxed max-w-sm mx-auto bg-amber-500/10 py-2 rounded-lg border border-amber-500/20">
-                                ⚠️ Evitar tonalidades claras, así como también colores dorados y plateados.
+                                ⚠️ Evitar colores claros, dorados y plateados.
                             </p>
                         </div>
                         
